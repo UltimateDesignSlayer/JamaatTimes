@@ -1,3 +1,32 @@
-.jamaat-times {
-  border:1px solid green;
+body.jamaat-times-app {
+  color: #554600;
+}
+
+body.jamaat-times-app h1 {
+  border-bottom: 3px solid #FFD300;
+  padding: 15px 0;
+}
+
+.table-prayer-times {
+  border-color: #FFD300;
+  margin: auto;
+  max-width: 500px;
+}
+
+.table-prayer-times, .table-prayer-times > tbody > tr > td, .table-prayer-times > thead > tr > td {
+  border-color: #FFD300;
+}
+
+.table-prayer-times > tbody > tr:hover {
+  background: #D4C26A;
+}
+
+.table-prayer-times thead{
+  text-transform: uppercase;
+  font-weight: bold;
+  background:#FFF0AA;
+}
+
+.table-prayer-times .table-prayer-times-name {
+  text-transform: capitalize;
 }

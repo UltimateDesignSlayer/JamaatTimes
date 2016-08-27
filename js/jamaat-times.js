@@ -95,15 +95,25 @@ var jamaatTimes = (function(){
 
       //Add one new list item per item in prayerTimeObjArr array
       return(
-        <ul>
+        <table className="table table-bordered table-hover table-prayer-times">
+          <thead>
+            <tr>
+              <td>Prayer</td>
+              <td>Time</td>
+            </tr>
+          </thead>
+          <tbody>
+            {this.state.prayerTimeObjArr.map(function(prayerTime){
+              return (
+                <tr>
+                  <td className="table-prayer-times-name">{prayerTime.name}</td>
+                  <td className="table-prayer-times-time">{prayerTime.time}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
 
-          {this.state.prayerTimeObjArr.map(function(prayerTime){
-            return (
-              <li>{prayerTime.name} -- {prayerTime.time}</li>
-            );
-          })}
-
-        </ul>
       )
     }
   });
