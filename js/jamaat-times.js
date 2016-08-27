@@ -50,7 +50,7 @@ var jamaatTimes = (function(){
       $.ajax({
         url: 'https://openws.herokuapp.com/' + that.props.openWsDataCollection + '/' + that.props.openWsObjId + '?apiKey=' + that.props.openWsApiKey,
         type: 'PUT',
-        data: ,
+        data: updatedData,
         success: function(data){
           console.log('UPDATED - ', data);
         }
@@ -60,42 +60,34 @@ var jamaatTimes = (function(){
     //Get data from openWS
     getData: function(){
       var that = this;
-      var objId = JSON.stringify({_id: that.props.openWsObjId});
 
       // Set up an interval so that the ajax is fired once every 20 secs and state is updated with fresh data.
       // Virtual DOM will then be updated, and the user gets the up to date times. Include an indicator when the AJAX runs,
       // so that the user knows something is happening.
-      setInterval(
-        function(){
-          $.ajax({
-            url: 'https://openws.herokuapp.com/' + that.props.openWsDataCollection + '?apiKey=' + that.props.openWsApiKey,
-            type: 'GET',
-            success: function(data){
-              console.log(data);
+      $.ajax({
+        url: 'https://openws.herokuapp.com/' + that.props.openWsDataCollection + '?apiKey=' + that.props.openWsApiKey,
+        type: 'GET',
+        success: function(data){
 
-              var newData = $.grep(data, function(jsonData, i){
-                // newData should only contain jamaatTimes array. filter the data collection for just the
-                // jamaat times data object.
-                return (jsonData._id === '57c1dae68c4ee80300ad1e07');
-              });
-              console.log(newData[0].jamaatTimes);
-
-              that.setState({
-                prayerTimeObjArr: newData[0].jamaatTimes
-              });
-            }
+          var newData = $.grep(data, function(jsonData, i){
+            // newData should only contain jamaatTimes array. filter the data collection for just the
+            // jamaat times data object.
+            return (jsonData._id === that.props.openWsObjId);
           });
-        },
-        5000
-      );
+
+          that.setState({
+            prayerTimeObjArr: newData[0].jamaatTimes
+          });
+        }
+      });
 
     },
 
     //this is run first. best place to bind events...
     componentDidMount: function(){
-      this.getData();
+      this.getData()
+      setInterval(this.getData(), 5000);
       this.bindEvent();
-      console.log("jamaatTimeComp run");
     },
 
     render: function(){
