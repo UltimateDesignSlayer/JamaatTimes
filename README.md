@@ -3,7 +3,12 @@ Tell times of Jamaat at local mosque (St Area Mosque)
 
 # Requirements
 
-This will be a simple web app that lists out the prayer times at my local mosque. The prayer times change roughly once every couple weeks. The trick here is to have the ability to quickly and securely update the list. The app data will be updated every minute by a recurring ajax get. Host the data here: https://openws-app.herokuapp.com/
+This will be a simple web app that lists out the prayer times at my local mosque. The prayer times change roughly once every couple weeks. The trick here is to have the ability to quickly and securely update the list.
+
+# Ideas
+The app data will be updated every 20 secs by a recurring ajax get. Host the data here: https://openws-app.herokuapp.com/
+
+Combine ```GET``` and ```PUT``` functions into one. Determine the AJAX type based on params passed in.
 
 # JSON data structure
 ```{
