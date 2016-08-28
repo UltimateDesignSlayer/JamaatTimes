@@ -1,22 +1,50 @@
 var jamaatTimes = (function(){
   var JamaatTimeComponent = React.createClass({
-    bindEvent: function(){
-      var that = this;
-
-      $('h1').on('click', function(){
-        that.setState({
-          prayerTimeObjArr: that.state.prayerTimeObjArr
-        });
-        console.log('New prayerTimeObjArr state: ' + that.state.prayerTimeObjArr);
-      });
-    },
-
     //set up the state
     getInitialState: function(){
       return{
-        prayerTimeObjArr: [] //object array of each prayer jamaat time.
+        isEditMode: false //if true, the times are text boxes which can be submitted.
       }
     },
+
+    // Wrote this so that I can update a state in this component from a child. Passed in the render.
+    // Param 1: string containing the name of the state.
+    // Param 2: value of state.
+    updateState: function(stateName, value){
+      var setStateValueObj = {};
+      setStateValueObj[stateName] = value;
+
+      this.setState(setStateValueObj);
+    },
+
+    render: function(){
+      var that = this;
+
+      var tableSaveEditState = <JamaatTimes isJamaatEditMode={this.state.isEditMode} openWsApiKey='065fee4395d438b8de778c2294088ce5' openWsDataCollection='jamaattimes_data_collection' openWsObjId='57c1dae68c4ee80300ad1e07' updateParentState={this.updateState} />;
+      var editSaveLink = <p className="edit-link"><span>Edit</span></p>;
+
+      if (this.state.isEditMode){
+        editSaveLink = <a className="btn btn-success save-link">Save changes</a>;
+      }
+
+      return(
+        <div>
+          <table className="table table-bordered table-hover table-prayer-times">
+            <thead>
+              <tr>
+                <td>Prayer</td>
+                <td>Time</td>
+              </tr>
+            </thead>
+            {tableSaveEditState}
+          </table>
+          {editSaveLink}
+        </div>
+      )
+    }
+  });
+
+  var JamaatTimes = React.createClass({
 
     //update data
     updateData: function(){
@@ -26,23 +54,23 @@ var jamaatTimes = (function(){
         "jamaatTimes": [
           {
             "name": "fajr",
-            "time": "5:30am"
+            "time": "4:15am"
           },
           {
             "name": "zuhr",
-            "time": "1:00pm"
+            "time": "1:30pm"
           },
           {
             "name": "asr",
-            "time": "6:00pm"
+            "time": "8:15pm"
           },
           {
             "name": "magrib",
-            "time": "6:10pm"
+            "time": "9:35pm"
           },
           {
             "name": "isha",
-            "time": "7:30pm"
+            "time": "10:45pm"
           }
           ]
         };
@@ -51,14 +79,19 @@ var jamaatTimes = (function(){
         url: 'https://openws.herokuapp.com/' + that.props.openWsDataCollection + '/' + that.props.openWsObjId + '?apiKey=' + that.props.openWsApiKey,
         type: 'PUT',
         data: updatedData,
+        beforeSend: function(){
+          $('#jamaatTimes').append('<span class="loading-notice">SAVING...</span>');
+        },
         success: function(data){
           console.log('UPDATED - ', data);
+          that.getData(true, false);
+          $('.loading-notice').remove();
         }
       });
     },
 
     //Get data
-    getData: function(){
+    getData: function(isGetNow, isStartInterval){
       var that = this;
 
       var $ajaxGetData = function(){
@@ -85,45 +118,59 @@ var jamaatTimes = (function(){
       };
 
       //Fire ajax immediately first time.
-      $ajaxGetData();
+      if (isGetNow){
+        $ajaxGetData();
+      }
 
-      // Set up an interval so that the ajax is fired once every X secs and state is updated with fresh data.
+      // Set up an interval so that the ajax is fired once every minute and state is updated with fresh data.
       // Virtual DOM will then be updated, and the user gets the up to date times. Include an indicator when the AJAX runs,
       // so that the user knows something is happening.
-      setInterval(function(){ $ajaxGetData() }, 10000);
+      if (isStartInterval){
+        setInterval(function(){ $ajaxGetData() }, 10000);
+      }
+    },
 
+    bindEvents: function(){
+      var that = this;
+
+      $('.jamaat-times').on('click', '.edit-link span', function(e){
+        that.props.updateParentState('isEditMode', true);
+      });
+
+      $('.jamaat-times').on('click', '.btn.save-link', function(){
+        that.updateData();
+        that.props.updateParentState('isEditMode', false);
+      });
+    },
+
+    //set up the state
+    getInitialState: function(){
+      return{
+        prayerTimeObjArr: [], //object array of each prayer jamaat time.
+      }
     },
 
     //this is run first. best place to bind events...
     componentDidMount: function(){
-      this.getData();
-      this.bindEvent();
+      console.log(this.props.isJamaatEditMode);
+      this.getData(true, true);
+      this.bindEvents();
     },
 
     render: function(){
-      var that = this;
-
       //Add one new list item per item in prayerTimeObjArr array
-      return(
-        <table className="table table-bordered table-hover table-prayer-times">
-          <thead>
-            <tr>
-              <td>Prayer</td>
-              <td>Time</td>
-            </tr>
-          </thead>
-          <tbody>
-            {this.state.prayerTimeObjArr.map(function(prayerTime){
+      return (
+        <tbody>
+          {this.state.prayerTimeObjArr.map( function(prayerTime){
               return (
                 <tr>
                   <td className="table-prayer-times-name">{prayerTime.name}</td>
                   <td className="table-prayer-times-time">{prayerTime.time}</td>
                 </tr>
               );
-            })}
-          </tbody>
-        </table>
-
+            })
+          }
+        </tbody>
       )
     }
   });
@@ -131,7 +178,7 @@ var jamaatTimes = (function(){
   return {
     init: function(){
       ReactDOM.render(
-        <JamaatTimeComponent openWsApiKey='065fee4395d438b8de778c2294088ce5' openWsDataCollection='jamaattimes_data_collection' openWsObjId='57c1dae68c4ee80300ad1e07' />,
+        <JamaatTimeComponent />,
         document.getElementById('jamaatTimes')
       )
     }

@@ -30,3 +30,13 @@ body.jamaat-times-app h1 {
 .table-prayer-times .table-prayer-times-name {
   text-transform: capitalize;
 }
+
+.jamaat-times .edit-link span {
+  color: #C6A400;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.jamaat-times .btn {
+  margin-top: 10px;
+}
