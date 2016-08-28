@@ -57,36 +57,46 @@ var jamaatTimes = (function(){
       });
     },
 
-    //Get data from openWS
+    //Get data
     getData: function(){
       var that = this;
 
-      // Set up an interval so that the ajax is fired once every 20 secs and state is updated with fresh data.
+      var $ajaxGetData = function(){
+        $.ajax({
+          url: 'https://openws.herokuapp.com/' + that.props.openWsDataCollection + '?apiKey=' + that.props.openWsApiKey,
+          type: 'GET',
+          beforeSend: function(){
+            $('#jamaatTimes').append('<span class="loading-notice">Updating...</span>');
+          },
+          success: function(data){
+            $('.loading-notice').remove();
+
+            var newData = $.grep(data, function(jsonData, i){
+              // newData should only contain jamaatTimes array. filter the data collection for just the
+              // jamaat times data object.
+              return (jsonData._id === that.props.openWsObjId);
+            });
+
+            that.setState({
+              prayerTimeObjArr: newData[0].jamaatTimes
+            });
+          }
+        })
+      };
+
+      //Fire ajax immediately first time.
+      $ajaxGetData();
+
+      // Set up an interval so that the ajax is fired once every X secs and state is updated with fresh data.
       // Virtual DOM will then be updated, and the user gets the up to date times. Include an indicator when the AJAX runs,
       // so that the user knows something is happening.
-      $.ajax({
-        url: 'https://openws.herokuapp.com/' + that.props.openWsDataCollection + '?apiKey=' + that.props.openWsApiKey,
-        type: 'GET',
-        success: function(data){
-
-          var newData = $.grep(data, function(jsonData, i){
-            // newData should only contain jamaatTimes array. filter the data collection for just the
-            // jamaat times data object.
-            return (jsonData._id === that.props.openWsObjId);
-          });
-
-          that.setState({
-            prayerTimeObjArr: newData[0].jamaatTimes
-          });
-        }
-      });
+      setInterval(function(){ $ajaxGetData() }, 10000);
 
     },
 
     //this is run first. best place to bind events...
     componentDidMount: function(){
-      this.getData()
-      setInterval(this.getData(), 5000);
+      this.getData();
       this.bindEvent();
     },
 
