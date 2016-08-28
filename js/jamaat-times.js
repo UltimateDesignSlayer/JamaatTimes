@@ -49,6 +49,19 @@ var jamaatTimes = (function(){
     //update data
     updateData: function(){
       var that = this;
+      var jamaatTimes = [];
+
+      $.each($('.table-prayer-times tbody tr'), function(i, elem){
+
+        var prayerTimeObj = {
+          name: $('td.table-prayer-times-name input', elem).val(),
+          time: $('td.table-prayer-times-time input', elem).val()
+        };
+
+        jamaatTimes.push(prayerTimeObj);
+      });
+
+      console.log({jamaatTimes});
 
       var updatedData = {
         "jamaatTimes": [
@@ -78,7 +91,7 @@ var jamaatTimes = (function(){
       $.ajax({
         url: 'https://openws.herokuapp.com/' + that.props.openWsDataCollection + '/' + that.props.openWsObjId + '?apiKey=' + that.props.openWsApiKey,
         type: 'PUT',
-        data: updatedData,
+        data: {jamaatTimes},
         beforeSend: function(){
           $('#jamaatTimes').append('<span class="loading-notice">SAVING...</span>');
         },
@@ -126,7 +139,7 @@ var jamaatTimes = (function(){
       // Virtual DOM will then be updated, and the user gets the up to date times. Include an indicator when the AJAX runs,
       // so that the user knows something is happening.
       if (isStartInterval){
-        setInterval(function(){ $ajaxGetData() }, 10000);
+        setInterval(function(){ $ajaxGetData() }, 60000);
       }
     },
 
@@ -158,14 +171,26 @@ var jamaatTimes = (function(){
     },
 
     render: function(){
+      var that = this;
+
       //Add one new list item per item in prayerTimeObjArr array
       return (
         <tbody>
           {this.state.prayerTimeObjArr.map( function(prayerTime){
+              var nameElem = prayerTime.name;
+              var timeElem = prayerTime.time;
+
+              // NOTE: Always use "defaultValue" if you want JSX rendered inputs to be editable.
+              // Value seems to become a fixed value and users cannot edit input fields.
+              if (that.props.isJamaatEditMode){
+                nameElem = <input type="text" defaultValue={prayerTime.name} id="prayerNameField" />;
+                timeElem = <input type="text" defaultValue={prayerTime.time} id="prayerTimeField" />;
+              }
+
               return (
                 <tr>
-                  <td className="table-prayer-times-name">{prayerTime.name}</td>
-                  <td className="table-prayer-times-time">{prayerTime.time}</td>
+                  <td className="table-prayer-times-name">{nameElem}</td>
+                  <td className="table-prayer-times-time">{timeElem}</td>
                 </tr>
               );
             })
