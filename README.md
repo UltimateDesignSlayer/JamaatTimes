@@ -1,5 +1,5 @@
 # JamaatTimes
-Tell times of prayer at a local mosque
+Simple app written with React to tell times of prayer at a local mosque
 
 # Requirements
 
