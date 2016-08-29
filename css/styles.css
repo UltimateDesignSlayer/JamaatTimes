@@ -44,8 +44,12 @@ body.jamaat-times-app h1 {
   background-color: #FFF0AA;
   color: #554600;
 }
-  .jamaat-times .btn.btn-edit-link:hover{
+  .jamaat-times .btn.btn-edit-link:hover {
     background-color: #D4C26A;
+  }
+
+  .jamaat-times .update-success-notice {
+    color: #00b521;
   }
 
 .jamaat-times .btn {

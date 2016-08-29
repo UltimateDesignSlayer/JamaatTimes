@@ -68,11 +68,17 @@ var jamaatTimes = (function(){
         type: 'PUT',
         data: {jamaatTimes},
         beforeSend: function(){
+          $('.update-success-notice').remove();
           $('#jamaatTimes').append('<span class="loading-notice">SAVING...</span>');
         },
         success: function(data){
           that.getData(true, false);
           $('.loading-notice').remove();
+          $('#jamaatTimes').append('<span class="update-success-notice">Update successful.</span>');
+
+          setTimeout(function(){
+            $('.update-success-notice').remove();
+          }, 2500);
         }
       });
     },
