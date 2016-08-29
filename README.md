@@ -1,14 +1,12 @@
 # JamaatTimes
-Tell times of Jamaat at local mosque (St Area Mosque)
+Simple app written with React to tell times of prayer at a local mosque
 
 # Requirements
 
-This will be a simple web app that lists out the prayer times at my local mosque. The prayer times change roughly once every couple weeks. The trick here is to have the ability to quickly and securely update the list.
+This will be a simple web app that lists out the prayer times at my local mosque. The prayer times change roughly once every couple weeks. The trick here is to have the ability to quickly update the list.
 
-# Ideas
-The app data will be updated every 20 secs by a recurring ajax get. Host the data here: https://openws-app.herokuapp.com/
-
-Combine ```GET``` and ```PUT``` functions into one. Determine the AJAX type based on params passed in.
+# Notes
+The app data is updated every minute or so by a recurring AJAX GET. Data is currently hosted here: https://openws-app.herokuapp.com/
 
 # JSON data structure
 ```{
