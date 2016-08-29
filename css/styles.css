@@ -40,11 +40,13 @@ body.jamaat-times-app h1 {
   text-transform: capitalize;
 }
 
-.jamaat-times .edit-link span {
-  color: #C6A400;
-  text-decoration: underline;
-  cursor: pointer;
+.jamaat-times .btn.btn-edit-link {
+  background-color: #FFF0AA;
+  color: #554600;
 }
+  .jamaat-times .btn.btn-edit-link:hover{
+    background-color: #D4C26A;
+  }
 
 .jamaat-times .btn {
   margin-top: 10px;

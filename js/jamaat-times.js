@@ -21,7 +21,7 @@ var jamaatTimes = (function(){
       var that = this;
 
       var tableSaveEditState = <JamaatTimes isJamaatEditMode={this.state.isEditMode} openWsApiKey='065fee4395d438b8de778c2294088ce5' openWsDataCollection='jamaattimes_data_collection' openWsObjId='57c1dae68c4ee80300ad1e07' updateParentState={this.updateState} />;
-      var editSaveLink = <p className="edit-link"><span>Edit</span></p>;
+      var editSaveLink = <a className="btn btn-edit-link">Edit</a>;
       var tableClasses = 'table table-bordered table-hover table-prayer-times';
 
       if (this.state.isEditMode){
@@ -63,8 +63,6 @@ var jamaatTimes = (function(){
         jamaatTimes.push(prayerTimeObj);
       });
 
-      console.log({jamaatTimes});
-
       $.ajax({
         url: 'https://openws.herokuapp.com/' + that.props.openWsDataCollection + '/' + that.props.openWsObjId + '?apiKey=' + that.props.openWsApiKey,
         type: 'PUT',
@@ -73,7 +71,6 @@ var jamaatTimes = (function(){
           $('#jamaatTimes').append('<span class="loading-notice">SAVING...</span>');
         },
         success: function(data){
-          console.log('UPDATED - ', data);
           that.getData(true, false);
           $('.loading-notice').remove();
         }
@@ -123,7 +120,7 @@ var jamaatTimes = (function(){
     bindEvents: function(){
       var that = this;
 
-      $('.jamaat-times').on('click', '.edit-link span', function(e){
+      $('.jamaat-times').on('click', '.btn-edit-link', function(e){
         that.props.updateParentState('isEditMode', true);
       });
 
@@ -142,7 +139,6 @@ var jamaatTimes = (function(){
 
     //this is run first. best place to bind events...
     componentDidMount: function(){
-      console.log(this.props.isJamaatEditMode);
       this.getData(true, true);
       this.bindEvents();
     },
