@@ -22,14 +22,16 @@ var jamaatTimes = (function(){
 
       var tableSaveEditState = <JamaatTimes isJamaatEditMode={this.state.isEditMode} openWsApiKey='065fee4395d438b8de778c2294088ce5' openWsDataCollection='jamaattimes_data_collection' openWsObjId='57c1dae68c4ee80300ad1e07' updateParentState={this.updateState} />;
       var editSaveLink = <p className="edit-link"><span>Edit</span></p>;
+      var tableClasses = 'table table-bordered table-hover table-prayer-times';
 
       if (this.state.isEditMode){
         editSaveLink = <a className="btn btn-success save-link">Save changes</a>;
+        tableClasses += ' edit-mode'; //Add edit mode class to table for styling
       }
 
       return(
         <div>
-          <table className="table table-bordered table-hover table-prayer-times">
+          <table className={tableClasses}>
             <thead>
               <tr>
                 <td>Prayer</td>
@@ -62,31 +64,6 @@ var jamaatTimes = (function(){
       });
 
       console.log({jamaatTimes});
-
-      var updatedData = {
-        "jamaatTimes": [
-          {
-            "name": "fajr",
-            "time": "4:15am"
-          },
-          {
-            "name": "zuhr",
-            "time": "1:30pm"
-          },
-          {
-            "name": "asr",
-            "time": "8:15pm"
-          },
-          {
-            "name": "magrib",
-            "time": "9:35pm"
-          },
-          {
-            "name": "isha",
-            "time": "10:45pm"
-          }
-          ]
-        };
 
       $.ajax({
         url: 'https://openws.herokuapp.com/' + that.props.openWsDataCollection + '/' + that.props.openWsObjId + '?apiKey=' + that.props.openWsApiKey,

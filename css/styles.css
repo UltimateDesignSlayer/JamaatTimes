@@ -13,8 +13,17 @@ body.jamaat-times-app h1 {
   max-width: 500px;
 }
 
+.table-prayer-times.edit-mode {
+  max-width:100%;
+  table-layout:fixed;
+}
+
 .table-prayer-times, .table-prayer-times > tbody > tr > td, .table-prayer-times > thead > tr > td {
   border-color: #FFD300;
+}
+
+.table-prayer-times.edit-mode > tbody > tr > td input {
+  max-width: 100%;
 }
 
 .table-prayer-times > tbody > tr:hover {
