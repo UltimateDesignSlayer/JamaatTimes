@@ -21,7 +21,10 @@ var jamaatTimes = (function(){
       var that = this;
 
       var tableSaveEditState = <JamaatTimes isJamaatEditMode={this.state.isEditMode} openWsApiKey='065fee4395d438b8de778c2294088ce5' openWsDataCollection='jamaattimes_data_collection' openWsObjId='57c1dae68c4ee80300ad1e07' updateParentState={this.updateState} />;
-      var editSaveLink = <a className="btn btn-edit-link">Edit</a>;
+      var editSaveLink = '';
+      if(window.location.hash === '#edit'){
+        editSaveLink = <a className="btn btn-edit-link">Edit</a>;
+      }
       var tableClasses = 'table table-bordered table-hover table-prayer-times';
 
       if (this.state.isEditMode){
